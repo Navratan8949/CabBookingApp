@@ -1,0 +1,891 @@
+import 'react-native-gesture-handler';
+import * as React from 'react';
+import { NavigationContainer, useNavigation, DrawerActions } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet, Text, View } from 'react-native';
+import Entypo from "react-native-vector-icons/Entypo";
+// import Ionicons from "react-native-vector-icons/Ionicons"
+import SettingsScreen from './componant/SettingsScreen';
+import CenterScreen from './componant/CenterScreen';
+import ProfileScreen from './componant/ProfileScreen';
+import MoreScreen from './componant/MoreScreen';
+import MyProfile from './componant/SideDrawerComponant/MyProfile';
+import CabsWalePremium from './componant/SideDrawerComponant/CabsWalePremium';
+import MyAlerts from './componant/SideDrawerComponant/MyAlerts';
+import HomeScreen from './componant/HomeScreen';
+
+const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
+
+// function TabNavigator() {
+//   return (
+//     <Tab.Navigator
+//       screenOptions={({ route }) => ({
+//         tabBarIcon: ({ color, size }) => {
+//           let iconName;
+
+//           if (route.name === 'Home') {
+//             iconName = 'home';
+//           } else if (route.name === 'Settings') {
+//             iconName = 'settings';
+//           } else if (route.name === 'Center') {
+//             return <Ionicons name="add-circle" size={size} color={color} />;
+//           } else if (route.name === 'Profile') {
+//             iconName = 'person';
+//           } else if (route.name === 'More') {
+//             iconName = 'ellipsis-horizontal';
+//           }
+
+//           return <Ionicons name={iconName} size={size} color={color} />;
+//         },
+//         // Customize tabBar behavior here if needed
+//       })}
+//     >
+//       <Tab.Screen name="Home" component={HomeScreen} />
+//       <Tab.Screen name="Settings" component={SettingsScreen} />
+//       <Tab.Screen name="Center" component={CenterScreen} />
+//       <Tab.Screen name="Profile" component={ProfileScreen} />
+//       <Tab.Screen name="More" component={MoreScreen} />
+//     </Tab.Navigator>
+//   );
+// }
+
+function DrawerContent(props) {
+  return (
+    <View style={{ flex: 1 }}>
+      <Text style={styles.drawerItem} onPress={() => props.navigation.navigate('My Profile')}>Item 1</Text>
+      <Text style={styles.drawerItem} onPress={() => props.navigation.navigate('CabsWalePremium')}>Item 2</Text>
+      <Text style={styles.drawerItem} onPress={() => props.navigation.navigate('MyAlerts')}>Item 3</Text>
+    </View>
+  );
+}
+
+function DrawerNavigator() {
+  const navigation = useNavigation()
+  return (
+    <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />} screenOptions={{
+      headerRight: () => (
+        navigation.canGoBack() ? null : (
+          <Entypo
+            name='menu'
+            size={30}
+            color="black"
+            onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+          />
+        )
+      ),
+      headerLeft: () => (
+        navigation.canGoBack() ? (
+          <Ionicons
+            name="arrow-back"
+            size={30}
+            color="white"
+            onPress={() => navigation.goBack()}
+          />
+        ) : (
+          <Text style={{ fontSize: 27, color: 'black', fontStyle: 'italic', width: 100 }}>Flipcart</Text>
+        )
+      )
+    }}>
+      {/* <Drawer.Screen name="Tabs" component={TabNavigator} /> */}
+      <Drawer.Screen name="My Profile" component={MyProfile}
+      // options={{
+      //    headerLeft: () => (
+      //     navigation.canGoBack() ? (
+      //         <Ionicons
+      //             name="arrow-back"
+      //             size={30}
+      //             color="white"
+      //             onPress={() => navigation.goBack()}
+      //         />
+      //     ) : (
+      //         <Text style={{ fontSize: 27, color: 'white', fontStyle: 'italic', width: 100 }}>Flipcart</Text>
+      //     )
+      // )
+      // }}
+      />
+      <Drawer.Screen name="CabsWalePremium" component={CabsWalePremium} />
+      <Drawer.Screen name="MyAlerts" component={MyAlerts} />
+    </Drawer.Navigator>
+  );
+}
+
+function MainNavigator() {
+  const navigation = useNavigation()
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let iconName;
+
+          if (route.name === 'Home') {
+            iconName = 'home';
+          } else if (route.name === 'Settings') {
+            iconName = 'settings';
+          } else if (route.name === 'Center') {
+            return <Ionicons name="add-circle" size={size} color={color} />;
+          } else if (route.name === 'Profile') {
+            iconName = 'person';
+          } else if (route.name === 'More') {
+            iconName = 'ellipsis-horizontal';
+          }
+
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        // tabBarStyle: {
+        //   display: route.name === 'Center' ? 'none' : 'flex',
+        // },
+      })}
+    >
+      <Tab.Screen
+        name="Home"
+        component={DrawerNavigator}
+        options={{
+          headerShown: false,
+
+        }}
+
+      />
+
+      <Tab.Screen name="Settings" component={SettingsScreen} />
+      <Tab.Screen name="Center" component={CenterScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="More" component={MoreScreen} />
+    </Tab.Navigator>
+  );
+}
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <MainNavigator />
+    </NavigationContainer>
+  );
+}
+
+const styles = StyleSheet.create({
+  drawerItem: {
+    padding: 20,
+    fontSize: 18,
+  },
+});
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------//
+
+
+
+
+
+
+
+import { View, Text, StatusBar } from 'react-native';
+import React from 'react';
+import { NavigationContainer, useNavigation, DrawerActions } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import HomeScreen from './componant/HomeScreen';
+import Ionicons from "react-native-vector-icons/Ionicons";
+import CenterScreen from './componant/CenterScreen';
+import SettingsScreen from './componant/SettingsScreen';
+import MoreScreen from './componant/MoreScreen';
+import ProfileScreen from './componant/ProfileScreen';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import DrawerContent from './Routes/DrawerContent';
+import Entypo from "react-native-vector-icons/Entypo";
+import MyProfile from './componant/SideDrawerComponant/MyProfile';
+import MyAlerts from './componant/SideDrawerComponant/MyAlerts';
+import CabsWalePremium from './componant/SideDrawerComponant/CabsWalePremium';
+
+const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
+
+function DrawerNav() {
+  return (
+    <Drawer.Navigator
+      drawerContent={props => <DrawerContent {...props} />}
+      screenOptions={{
+        statusBarColor: "#0163d2",
+        headerStyle: {
+          backgroundColor: "#0163d2"
+        },
+        headerTintColor: "white",
+        headerTitleAlign: "center",
+        headerShown: false,
+        drawerPosition: "left",
+      }}
+    >
+      <Drawer.Screen name='Homes' component={StackNav} />
+    </Drawer.Navigator>
+  );
+}
+
+function StackNav() {
+  return (
+    <Stack.Navigator
+      initialRouteName='Home'
+      screenOptions={({ navigation }) => ({
+        headerTintColor: "black",
+        headerTitleAlign: "center",
+        headerRight: () => (
+          navigation.canGoBack() ? null : (
+            <Entypo
+              name='menu'
+              size={30}
+              color="black"
+              onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+            />
+          )
+        ),
+        headerLeft: () => (
+          navigation.canGoBack() ? (
+            <Ionicons
+              name="arrow-back"
+              size={30}
+              color="black"
+              onPress={() => navigation.goBack()}
+            />
+          ) : (
+            <Text style={{ fontSize: 27, color: 'black' }}>CabWale</Text>
+          )
+        )
+      })}
+    >
+      <Stack.Screen name='Home' component={HomeScreen} options={{
+        headerShown: false
+      }} />
+      <Stack.Screen name='Profile' component={MyProfile} />
+      <Stack.Screen name='MyAlerts' component={MyAlerts} />
+      <Stack.Screen name='CabsWalePremium' component={CabsWalePremium} />
+    </Stack.Navigator>
+  );
+}
+
+function BottomTab() {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        headerTitleAlign: "center",
+        tabBarIcon: ({ color, size }) => {
+          let iconName;
+
+          if (route.name === 'Home') {
+            iconName = 'home';
+          } else if (route.name === 'Setting') {
+            iconName = 'settings';
+          } else if (route.name === 'Center') {
+            return <Ionicons name="add-circle" size={size} color={color} />;
+          } else if (route.name === 'More') {
+            iconName = 'ellipsis-horizontal';
+          } else if (route.name === 'Profiles') {
+            iconName = 'person';
+          }
+
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarStyle: (() => {
+          const routeName = route?.state?.routes[route.state.index]?.name;
+          if (routeName === 'Profile' || routeName === 'MyAlerts' || routeName === 'CabsWalePremium') {
+            return { display: 'none' };
+          }
+          return;
+        })(),
+      })}
+    >
+      <Tab.Screen name='Home' component={DrawerNav} options={{
+        headerShown: false
+      }} />
+      <Tab.Screen name='Setting' component={SettingsScreen} />
+      <Tab.Screen name='Center' component={CenterScreen} />
+      <Tab.Screen name='More' component={MoreScreen} />
+      <Tab.Screen name='Profiles' component={ProfileScreen} />
+    </Tab.Navigator>
+  )
+}
+
+export default function App() {
+  return (
+    <View style={{ flex: 1 }}>
+      <NavigationContainer>
+        <BottomTab />
+      </NavigationContainer>
+    </View>
+  )
+}
+
+
+
+
+
+
+
+
+
+
+
+//------------------ isme stack per click karne per bottom tab hide hai-----------------//
+
+
+
+
+
+
+
+
+
+import 'react-native-gesture-handler';
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { View, Text, StyleSheet, Image } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+
+const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
+
+function HomeScreen() {
+  return (
+    <View style={styles.container}>
+      <Text>Home Screen</Text>
+    </View>
+  );
+}
+
+function SettingsScreen() {
+  return (
+    <View style={styles.container}>
+      <Text>Settings Screen</Text>
+    </View>
+  );
+}
+
+function CenterScreen() {
+  return (
+    <View style={styles.container}>
+      <Text>Center Screen</Text>
+    </View>
+  );
+}
+
+function TabNavigator() {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let iconName;
+
+          if (route.name === 'Home') {
+            iconName = 'home';
+          } else if (route.name === 'Settings') {
+            iconName = 'settings';
+          } else if (route.name === 'Center') {
+            return <Ionicons name="add-circle" size={size} color={color} />;
+          }
+
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarShowLabel: route.name !== 'Center',
+        tabBarStyle: { display: route.name === 'Center' ? 'none' : 'flex' }
+      })}
+    >
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Settings" component={SettingsScreen} />
+      <Tab.Screen
+        name="Center"
+        component={CenterScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="add-circle" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen name="Profile" component={SettingsScreen} />
+      <Tab.Screen name="More" component={SettingsScreen} />
+    </Tab.Navigator>
+  );
+}
+
+function DrawerContent({ navigation }) {
+  return (
+    <View style={{ flex: 1 }}>
+      <Text style={styles.drawerItem} onPress={() => navigation.navigate('Item1')}>Item 1</Text>
+      <Text style={styles.drawerItem} onPress={() => navigation.navigate('Item2')}>Item 2</Text>
+      <Text style={styles.drawerItem} onPress={() => navigation.navigate('Item3')}>Item 3</Text>
+    </View>
+  );
+}
+
+function MainNavigator() {
+  return (
+    <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
+      <Drawer.Screen name="Tabs" component={TabNavigator} />
+      <Drawer.Screen name="Item1" component={SettingsScreen} />
+      <Drawer.Screen name="Item2" component={SettingsScreen} />
+      <Drawer.Screen name="Item3" component={SettingsScreen} />
+    </Drawer.Navigator>
+  );
+}
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <MainNavigator />
+    </NavigationContainer>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  drawerItem: {
+    padding: 20,
+    fontSize: 18,
+  },
+});
+
+
+
+
+
+
+
+
+//-----------------isme home page per hi drawer hai or stack navigation bhi hai but stack navigation per bottom tab hai ------------------------//
+
+
+
+import 'react-native-gesture-handler';
+import * as React from 'react';
+import { NavigationContainer, useNavigation, DrawerActions } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet, Text, View } from 'react-native';
+import Entypo from "react-native-vector-icons/Entypo";
+import SettingsScreen from './componant/SettingsScreen';
+import CenterScreen from './componant/CenterScreen';
+import ProfileScreen from './componant/ProfileScreen';
+import MoreScreen from './componant/MoreScreen';
+import MyProfile from './componant/SideDrawerComponant/MyProfile';
+import CabsWalePremium from './componant/SideDrawerComponant/CabsWalePremium';
+import MyAlerts from './componant/SideDrawerComponant/MyAlerts';
+import HomeScreen from './componant/HomeScreen';
+import { createStackNavigator } from '@react-navigation/stack';
+
+const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
+
+function DrawerContent(props) {
+  return (
+    <View style={{ flex: 1 }}>
+      <Text style={styles.drawerItem} onPress={() => props.navigation.navigate('MyProfile')}>Item 1</Text>
+      <Text style={styles.drawerItem} onPress={() => props.navigation.navigate('CabsWalePremium')}>Item 2</Text>
+      <Text style={styles.drawerItem} onPress={() => props.navigation.navigate('MyAlerts')}>Item 3</Text>
+    </View>
+  );
+}
+
+function DrawerNavigator() {
+  const navigation = useNavigation();
+  return (
+    <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />} screenOptions={{
+      headerRight: () => (
+        navigation.canGoBack() ? null : (
+          <Entypo
+            name='menu'
+            size={30}
+            color="black"
+            onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+          />
+        )
+      ),
+      headerLeft: () => (
+        navigation.canGoBack() ? (
+          <Ionicons
+            name="arrow-back"
+            size={30}
+            color="white"
+            onPress={() => navigation.goBack()}
+          />
+        ) : (
+          <Text style={{ fontSize: 27, color: 'black', fontStyle: 'italic', width: 100 }}>Flipcart</Text>
+        )
+      )
+    }}>
+      <Drawer.Screen name="Stack" component={StackNav} options={{
+        headerShown: false
+      }} />
+    </Drawer.Navigator>
+  );
+}
+
+function StackNav() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="MyProfile" component={MyProfile} />
+      <Stack.Screen name="CabsWalePremium" component={CabsWalePremium} />
+      <Stack.Screen name="MyAlerts" component={MyAlerts} />
+    </Stack.Navigator>
+  );
+}
+
+function MainNavigator() {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let iconName;
+
+          if (route.name === 'Home') {
+            iconName = 'home';
+          } else if (route.name === 'Settings') {
+            iconName = 'settings';
+          } else if (route.name === 'Center') {
+            return <Ionicons name="add-circle" size={size} color={color} />;
+          } else if (route.name === 'Profile') {
+            iconName = 'person';
+          } else if (route.name === 'More') {
+            iconName = 'ellipsis-horizontal';
+          }
+
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarStyle: (() => {
+          const routeName = route?.state?.routes[route.state.index]?.name;
+          if (routeName === 'MyProfile' || routeName === 'CabsWalePremium' || routeName === 'MyAlerts') {
+            return { display: 'none' };
+          }
+          return;
+        })(),
+      })}
+    >
+      <Tab.Screen
+        name="Home"
+        component={DrawerNavigator}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen name="Settings" component={SettingsScreen} />
+      <Tab.Screen name="Center" component={CenterScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="More" component={MoreScreen} />
+    </Tab.Navigator>
+  );
+}
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <MainNavigator />
+    </NavigationContainer>
+  );
+}
+
+const styles = StyleSheet.create({
+  drawerItem: {
+    padding: 20,
+    fontSize: 18,
+  },
+});
+
+
+
+
+//------------- isme mene sidebar bna liya hai with and right way -----------------------//
+
+
+import 'react-native-gesture-handler';
+import * as React from 'react';
+import { NavigationContainer, useNavigation, DrawerActions, getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { Ionicons } from '@expo/vector-icons';
+import { Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Entypo from "react-native-vector-icons/Entypo";
+import SettingsScreen from './componant/SettingsScreen';
+import CenterScreen from './componant/CenterScreen';
+import ProfileScreen from './componant/ProfileScreen';
+import MoreScreen from './componant/MoreScreen';
+import MyProfile from './componant/SideDrawerComponant/MyProfile';
+import CabsWalePremium from './componant/SideDrawerComponant/CabsWalePremium';
+import MyAlerts from './componant/SideDrawerComponant/MyAlerts';
+import HomeScreen from './componant/HomeScreen';
+import { createStackNavigator } from '@react-navigation/stack';
+
+const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
+
+function DrawerContent(props) {
+  const [activeItem, setActiveItem] = React.useState(null);
+
+  const handlePress = (routeName) => {
+    setActiveItem(routeName);
+    props.navigation.navigate(routeName);
+  };
+
+  return (
+    <View style={styles.drawerContainer}>
+      <ScrollView >
+        <View style={styles.profileVerified}>
+          <Text style={styles.profileText}>Profile</Text>
+          <Pressable style={styles.profileVerifiedButton}>
+            <Text style={styles.profileVerifiedButtonText}>NOT VERIFIED</Text>
+          </Pressable>
+        </View>
+        <View style={styles.startMembership}>
+          <Text style={styles.startMembershiptext}>Start Membership</Text>
+          <TouchableOpacity style={styles.RechargenowButton}>
+            <Text style={styles.RechargenowButtonText}>Recharge Now</Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity
+          style={[styles.drawerItem, activeItem === 'HomeScreen' && styles.activeItem]}
+          onPress={() => handlePress('HomeScreen')}
+        >
+          <Ionicons name="home" size={20} color={activeItem === 'HomeScreen' ? 'white' : '#333'} />
+          <Text style={[styles.drawerItemText, activeItem === 'HomeScreen' && styles.activeItemText]}>Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.drawerItem, activeItem === 'MyProfile' && styles.activeItem]}
+          onPress={() => handlePress('MyProfile')}
+        >
+          <Ionicons name="person" size={20} color={activeItem === 'MyProfile' ? 'white' : '#333'} />
+          <Text style={[styles.drawerItemText, activeItem === 'MyProfile' && styles.activeItemText]}>My Profile</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.drawerItem, activeItem === 'CabsWalePremium' && styles.activeItem]}
+          onPress={() => handlePress('CabsWalePremium')}
+        >
+          <Ionicons name="star" size={20} color={activeItem === 'CabsWalePremium' ? 'white' : '#333'} />
+          <Text style={[styles.drawerItemText, activeItem === 'CabsWalePremium' && styles.activeItemText]}>CabsWale Premium</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.drawerItem, activeItem === 'MyAlerts' && styles.activeItem]}
+          onPress={() => handlePress('MyAlerts')}
+        >
+          <Ionicons name="alert" size={20} color={activeItem === 'MyAlerts' ? 'white' : '#333'} />
+          <Text style={[styles.drawerItemText, activeItem === 'MyAlerts' && styles.activeItemText]}>My Alerts</Text>
+        </TouchableOpacity>
+      </ScrollView>
+      <View style={styles.bottomContainer}>
+        <TouchableOpacity style={styles.logoutButton} onPress={() => alert('Logging out')}>
+          <Ionicons name="log-out" size={20} color="white" />
+          <Text style={styles.logoutButtonText}>Logout</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+
+  );
+}
+
+function DrawerNavigator() {
+  const navigation = useNavigation();
+  return (
+    <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />} screenOptions={{
+      headerRight: () => (
+        navigation.canGoBack() ? null : (
+          <Entypo
+            name='menu'
+            size={30}
+            color="black"
+            onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+          />
+        )
+      ),
+      headerLeft: () => (
+        navigation.canGoBack() ? (
+          <Ionicons
+            name="arrow-back"
+            size={30}
+            color="white"
+            onPress={() => navigation.goBack()}
+          />
+        ) : (
+          <Text style={{ fontSize: 27, color: 'black', fontStyle: 'italic', width: 100 }}>Flipcart</Text>
+        )
+      )
+    }}>
+      <Drawer.Screen name="Stack" component={StackNav} options={{
+        headerShown: false
+      }} />
+    </Drawer.Navigator>
+  );
+}
+
+function StackNav() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="HomeScreen" component={HomeScreen} />
+      <Stack.Screen name="MyProfile" component={MyProfile} />
+      <Stack.Screen name="CabsWalePremium" component={CabsWalePremium} />
+      <Stack.Screen name="MyAlerts" component={MyAlerts} />
+    </Stack.Navigator>
+  );
+}
+
+function getTabBarVisibility(route) {
+  const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
+  if (routeName === 'MyProfile' || routeName === 'CabsWalePremium' || routeName === 'MyAlerts') {
+    return 'none';
+  }
+  return 'flex';
+}
+
+function MainNavigator() {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let iconName;
+
+          if (route.name === 'Home') {
+            iconName = 'home';
+          } else if (route.name === 'Settings') {
+            iconName = 'settings';
+          } else if (route.name === 'Center') {
+            return <Ionicons name="add-circle" size={43} color={color} />;
+          } else if (route.name === 'Profile') {
+            iconName = 'person';
+          } else if (route.name === 'More') {
+            iconName = 'ellipsis-horizontal';
+          }
+
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarStyle: {
+          display: getTabBarVisibility(route),
+        },
+      })}
+    >
+      <Tab.Screen
+        name="Home"
+        component={DrawerNavigator}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen name="Settings" component={SettingsScreen} />
+      <Tab.Screen
+        name="Center"
+        component={CenterScreen}
+        options={{
+          tabBarLabel: () => null,
+        }}
+      />
+      <Tab.Screen name="More" component={MoreScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
+    </Tab.Navigator>
+  );
+}
+
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <MainNavigator />
+    </NavigationContainer>
+  );
+}
+
+const styles = StyleSheet.create({
+  drawerContainer: {
+    flex: 1,
+    paddingTop: 20,
+    backgroundColor: '#f5f5f5',
+  },
+  profileVerified: {
+    alignItems: "center",
+    padding: 20,
+  },
+  profileText: {
+    fontSize: 24,
+  },
+  profileVerifiedButton: {
+    backgroundColor: "#03A0FF",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  profileVerifiedButtonText: {
+    color: "white",
+    letterSpacing: 1,
+    fontSize: 15,
+  },
+  startMembership: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 10,
+    marginHorizontal: 15,
+    borderWidth: 1,
+    borderColor: "black",
+    marginBottom: 20
+  },
+  startMembershiptext: {
+    fontSize: 15
+  },
+  RechargenowButton: {
+    backgroundColor: "#03A0FF",
+    paddingVertical: 2,
+    paddingHorizontal: 7
+  },
+  RechargenowButtonText: {
+    color: "white",
+    fontSize: 15
+  },
+  drawerItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    marginHorizontal: 10,
+  },
+  drawerItemText: {
+    fontSize: 18,
+    color: '#333',
+    marginLeft: 15,
+  },
+  activeItem: {
+    backgroundColor: '#03A0FF',
+  },
+  activeItemText: {
+    color: 'white',
+  },
+  bottomContainer: {
+    // marginTop: 'auto',
+    marginTop: 30,
+    marginBottom: 30,
+    paddingHorizontal: 20,
+    // backgroundColor:"white"
+  },
+  logoutButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#03A0FF',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  logoutButtonText: {
+    color: 'white',
+    fontSize: 18,
+    marginLeft: 10,
+  },
+});
