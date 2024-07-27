@@ -11,7 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import Entypo from "react-native-vector-icons/Entypo";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import SettingsScreen from '../Componants/CenterTaB/SettingsScreen';
+import SettingsScreen from '../Componants/SettingsScreen';
 import CenterScreen from '../componant/Tabscreens/CenterScreen';
 import ProfileScreen from '../componant/Tabscreens/ProfileScreen';
 import MyProfile from '../componant/SideDrawerComponant/MyProfile';
